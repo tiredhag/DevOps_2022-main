@@ -62,8 +62,7 @@ public class ShoppingCartController implements ApplicationListener<ApplicationRe
 
     @Override
     public void onApplicationEvent(ApplicationReadyEvent applicationReadyEvent) {
-        Gauge.builder("1017", shoppingCarts,
+        Gauge.builder("cart_count", shoppingCarts,
                 b -> b.values().size()).register(meterRegistry);
     }
-
 }
