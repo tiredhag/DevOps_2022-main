@@ -14,13 +14,15 @@ resource "aws_cloudwatch_dashboard" "main" {
         "metrics": [
           [
             "${var.candidate_id}",
-            "cart_count.value"
+            "carts.value",
+            "checkouts.value",
+            "total_carts.value"
           ]
         ],
         "period": 300,
         "stat": "Maximum",
         "region": "eu-west-1",
-        "title": "Total number of accounts"
+        "title": "Carts in System"
       }
     }
   ]
