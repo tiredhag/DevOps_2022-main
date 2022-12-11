@@ -6,7 +6,6 @@ import java.util.*;
 
 @Component
 class NaiveCartImpl implements CartService {
-
     private final Map<String, Cart> shoppingCarts = new HashMap<>();
 
     @Override

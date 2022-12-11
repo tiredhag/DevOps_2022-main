@@ -1,6 +1,8 @@
 # Compiled class file
 *.class
 
+# Idea files when comitting via Intellij
+
 # Log file
 *.log
 
