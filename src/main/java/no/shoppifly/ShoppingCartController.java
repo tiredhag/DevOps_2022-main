@@ -21,7 +21,7 @@ public class ShoppingCartController implements ApplicationListener<ApplicationRe
     @Autowired
     private final CartService cartService;
 
-    public ShoppingCartController(CartService cartService) {
+    public ShoppingCartController(CartService cartService, MeterRegistry meterRegistry) {
         this.cartService = cartService;
         this.meterRegistry = meterRegistry;
     }
