@@ -15,6 +15,7 @@ import java.util.Map;
 public class ShoppingCartController implements ApplicationListener<ApplicationReadyEvent> {
 
     private final Map<String, Cart> shoppingCarts = new HashMap<>();
+    private final Map<String, Cart> metricsMap = new HashMap<>();
     private MeterRegistry meterRegistry;
 
     @Autowired
@@ -22,10 +23,12 @@ public class ShoppingCartController implements ApplicationListener<ApplicationRe
 
     public ShoppingCartController(CartService cartService) {
         this.cartService = cartService;
+        this.meterRegistry = meterRegistry;
     }
 
     @GetMapping(path = "/cart/{id}")
     public Cart getCart(@PathVariable String id) {
+        meterRegistry.counter("cart").increment();
         return cartService.getCart(id);
     }
 
@@ -36,6 +39,11 @@ public class ShoppingCartController implements ApplicationListener<ApplicationRe
      */
     @PostMapping(path = "/cart/checkout")
     public String checkout(@RequestBody Cart cart) {
+        String checkout = cartService.checkout(cart);
+        shoppingCarts.put(cart.getId(), cart);
+        metricsMap.remove(cart.getId());
+
+        meterRegistry.counter("checkout_carts").increment();
         return cartService.checkout(cart);
     }
 
@@ -47,6 +55,8 @@ public class ShoppingCartController implements ApplicationListener<ApplicationRe
      */
     @PostMapping(path = "/cart")
     public Cart updateCart(@RequestBody Cart cart) {
+        metricsMap.put(cart.getId(), cart);
+        meterRegistry.counter("update_carts").increment();
         return cartService.update(cart);
     }
 
@@ -57,12 +67,17 @@ public class ShoppingCartController implements ApplicationListener<ApplicationRe
      */
     @GetMapping(path = "/carts")
     public List<String> getAllCarts() {
+        meterRegistry.counter("all_carts").increment();
         return cartService.getAllsCarts();
     }
 
     @Override
     public void onApplicationEvent(ApplicationReadyEvent applicationReadyEvent) {
-        Gauge.builder("cart_count", shoppingCarts,
+        Gauge.builder("carts", metricsMap,
                 b -> b.values().size()).register(meterRegistry);
+        Gauge.builder("checkouts", shoppingCarts,
+                b -> b.values().size()).register(meterRegistry);
+        Gauge.builder("total_carts", cartService,
+                b -> b.total()).register(meterRegistry);
     }
 }
