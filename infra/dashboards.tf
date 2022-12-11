@@ -16,7 +16,8 @@ resource "aws_cloudwatch_dashboard" "main" {
             "${var.candidate_id}",
             "carts.value",
             "checkouts.value",
-            "total_carts.value"
+            "total_carts.value",
+            "checkout_latency.avg"
           ]
         ],
         "period": 300,
