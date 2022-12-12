@@ -7,7 +7,7 @@ import java.util.List;
 @Component
 public interface CartService {
 
-    float total(); //Added from naivecartimpl
+    float total();
 
     Cart getCart(String id);
 
