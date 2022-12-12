@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class CartServiceTest {
-    /* Removed failing unit test for metrics
+    /* Removed unit test for metrics
     @Test
     public void shouldRemoveCartAfterCheckout() {
 
